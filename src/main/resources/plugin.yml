@@ -1,0 +1,47 @@
+name: CSXLandManager
+version: '1.2.8'
+main: dev.cosax.cSXLandManager.CSXLandManager
+api-version: '1.21'
+load: POSTWORLD
+author: cosaxid
+description: A GriefPrevention addon that allows players to rent, buy, and sell claims through an interactive GUI with Vault economy support.
+website: cosax.alfikz.my.id
+
+softdepend:
+  - GriefPrevention
+  - Vault
+
+commands:
+  landmanagement:
+    description: Open the land management GUI or manage claim settings
+    usage: /landmanagement [setprice|sell|unsell|cancelrent] [price]
+    aliases: [landmgmt, lm, landm]
+
+permissions:
+  landmgmt.use:
+    description: Allows opening the land management GUI
+    default: true
+  landmgmt.rent:
+    description: Allows renting claims
+    default: true
+  landmgmt.buy:
+    description: Allows buying claims
+    default: true
+  landmgmt.sell:
+    description: Allows selling own claims
+    default: true
+  landmgmt.autorenew:
+    description: Allows using the auto-renew feature
+    default: true
+  landmgmt.bypass:
+    description: Bypass all payment requirements (free rent/buy/sell)
+    default: false
+  landmgmt.admin:
+    description: Administrative permissions - cancel rents, set prices
+    default: op
+    children:
+      landmgmt.use: true
+      landmgmt.rent: true
+      landmgmt.buy: true
+      landmgmt.sell: true
+      landmgmt.autorenew: true

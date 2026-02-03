@@ -1,0 +1,104 @@
+# CSX LandManager Messages Configuration
+# Use & for color codes, format codes like &n, &o, etc.
+
+prefix: "&6[LandManager] &r"
+
+# General messages
+no-permission: "&cYou don't have permission to do this."
+only-players: "&cThis command can only be used by players."
+plugin-reloaded: "&aConfiguration reloaded successfully!"
+invalid-number: "&cInvalid number: {number}"
+
+# Claim messages
+not-in-claim: "&cYou are not standing in a claim."
+claim-not-found: "&cClaim not found."
+not-your-claim: "&cThis is not your claim."
+claim-not-managed: "&cThis claim is not managed by LandManager."
+claim-already-managed: "&cThis claim is already managed."
+claim-setup-success: "&aClaim is now set up for {action}!"
+
+# Rent messages
+rent-success: "&aYou have successfully rented this claim for {duration}."
+rent-failed: "&cFailed to rent claim: {reason}"
+rent-already-rented: "&cThis claim is already rented by {player}."
+rent-not-available: "&cThis claim is not available for rent."
+rent-extended: "&aYou have extended your rent for {duration}."
+rent-extend-failed: "&cFailed to extend rent: {reason}"
+rent-expired: "&cYour rent for this claim has expired."
+rent-cancelled: "&cYour rent has been cancelled by an admin."
+rent-cancelled-admin: "&aYou have cancelled the rent for this claim."
+rent-cancelled-owner: "&aYou have cancelled the rent for your claim."
+no-active-rent: "&cThere is no active rent for this claim."
+insufficient-funds: "&cYou don't have enough money. Need: {needed}, Have: {have}"
+price-set: "&aRent price set to {price}."
+auto-renew-enabled: "&aAuto-renew is now &2enabled&a."
+auto-renew-disabled: "&aAuto-renew is now &cdisabled&a."
+auto-renew-failed: "&cAuto-renew failed: insufficient funds."
+auto-renew-disabled-low-funds: "&cAuto-renew has been disabled due to insufficient funds."
+
+# Buy/Sell messages
+sell-price-set: "&aSell price set to {price}."
+claim-listed: "&aYour claim is now listed for sale at {price}.!"
+claim-removed-sale: "&aYour claim is no longer for sale."
+buy-success: "&aYou have successfully purchased this claim for {price}.!"
+buy-failed: "&cFailed to purchase claim: {reason}"
+not-for-sale: "&cThis claim is not for sale."
+cannot-buy-own-claim: "&cYou cannot buy your own claim."
+
+# Economy messages
+economy-not-found: "&cEconomy plugin not found. Please install Vault."
+economy-error: "&cAn error occurred while processing the economy transaction."
+
+# GriefPrevention messages
+gp-not-found: "&cGriefPrevention plugin not found. Please install GriefPrevention."
+gp-error: "&cAn error occurred while interacting with GriefPrevention."
+
+# GUI messages
+gui:
+  claim-info: "&6Claim Information"
+  owner: "&eOwner: &f{owner}"
+  renter: "&eRenter: &f{renter}"
+  size: "&eSize: &f{area} blocks"
+  rent-price: "&eRent Price: &f{price}"
+  sell-price: "&eSell Price: &f{price}"
+  rent-duration: "&eDuration: &f{duration}"
+  remaining-time: "&eRemaining: &f{time}"
+  status: "&eStatus: &f{status}"
+  auto-renew: "&eAuto-renew: &f{enabled}"
+
+  status-available: "&aAvailable"
+  status-rented: "&eRented"
+  status-for-sale: "&6For Sale"
+  status-private: "&7Private"
+
+  button-rent: "&aRent Claim"
+  button-buy: "&6Buy Claim"
+  button-extend: "&eExtend Rent"
+  button-auto-renew: "&bToggle Auto-Renew"
+  button-close: "&cClose"
+
+  lore-rent: "&7Click to rent this claim"
+  lore-buy: "&7Click to purchase this claim"
+  lore-extend: "&7Click to extend your rent"
+  lore-auto-renew-enabled: "&7Auto-renew is &aenabled"
+  lore-auto-renew-disabled: "&7Auto-renew is &cdisabled"
+
+# Time formats
+time:
+  format: "{days}d {hours}h {minutes}m {seconds}s"
+  days: "{days} day(s)"
+  hours: "{hours} hour(s)"
+  minutes: "{minutes} minute(s)"
+  seconds: "{seconds} second(s)"
+  expired: "Expired"
+
+# Admin messages
+admin-only: "&cThis command is for admins only."
+admin-bypass: "&eAdmin bypass: Payment skipped."
+rent-force-ended: "&aForce ended the rent for this claim."
+ownership-transferred: "&aTransferred claim ownership from {from} to {to}."
+
+# Error messages
+error-occurred: "&cAn error occurred. Please contact an administrator."
+database-error: "&cA database error occurred. Please contact an administrator."
+contact-admin: "&cPlease contact an administrator for assistance."

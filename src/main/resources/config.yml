@@ -1,0 +1,84 @@
+# CSX LandManager Configuration File
+
+# Storage type: YAML, SQLite, H2, MySQL, or MariaDB
+storage:
+  type: H2
+
+  # MySQL/MariaDB settings (only used if type is MySQL or MariaDB)
+  mysql:
+    host: localhost
+    port: 3306
+    database: minecraft
+    username: minecraft
+    password: password
+    # Connection pool settings
+    pool-size: 10
+    connection-timeout: 30000
+    max-lifetime: 1800000
+
+# Rent settings
+rent:
+  # Enable or disable auto-renew globally (players also need permission)
+  auto-renew-enabled: true
+
+  # Default rent duration in milliseconds
+  # Examples:
+  # 1 hour = 3600000
+  # 1 day = 86400000
+  # 1 week = 604800000
+  default-duration: 604800000
+
+  # How often to check for expired rents (in ticks, 20 ticks = 1 second)
+  # Default: 1200 ticks = 1 minute
+  expiration-check-interval: 1200
+
+# Economy settings
+economy:
+  # Enable economy integration (requires Vault)
+  enabled: true
+
+  # Allow admins to bypass payments
+  admin-bypass-payment: true
+
+# GUI settings
+gui:
+  # GUI titles (use & for color codes)
+  titles:
+    main: "&6Land Management"
+    confirm: "&eConfirm Action"
+    admin: "&cAdmin Controls"
+
+  # GUI size (must be multiple of 9, max 54)
+  size: 54
+
+  # Sound effects on actions (requires Spigot/Paper)
+  sounds:
+    enabled: true
+    click: UI_BUTTON_CLICK
+    success: ENTITY_PLAYER_LEVELUP
+    error: ENTITY_VILLAGER_NO
+    rent-success: ENTITY_EXPERIENCE_ORB_PICKUP
+    buy-success: ENTITY_PLAYER_LEVELUP
+
+# Claim settings
+claim:
+  # Minimum rent price
+  min-rent-price: 0.0
+
+  # Maximum rent price (0 for no limit)
+  max-rent-price: 0.0
+
+  # Minimum sell price
+  min-sell-price: 0.0
+
+  # Maximum sell price (0 for no limit)
+  max-sell-price: 0.0
+
+  # Maximum rent duration in milliseconds (0 for no limit)
+  max-rent-duration: 0
+
+  # Minimum rent duration in milliseconds
+  min-rent-duration: 3600000
+
+# Debug mode
+debug: false
