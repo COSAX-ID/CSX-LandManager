@@ -26,6 +26,7 @@ public class RentManager {
     private final ClaimManager claimManager;
     private final EconomyManager economyManager;
     private final StorageManager storageManager;
+    private final GUIManager guiManager;
 
     public RentManager(CSXLandManager plugin, Config config, Messages messages,
                        ClaimManager claimManager, EconomyManager economyManager,
@@ -36,6 +37,7 @@ public class RentManager {
         this.claimManager = claimManager;
         this.economyManager = economyManager;
         this.storageManager = storageManager;
+        this.guiManager = plugin.getGUIManager();
     }
 
     /**
@@ -130,6 +132,29 @@ public class RentManager {
                             return storageManager.saveClaimData(claimData)
                                 .thenApply(v -> {
                                     plugin.getLogger().info("Rent started successfully for claim " + claimData.getClaimId());
+
+                                    // Notify the original owner that their claim has been rented
+                                    if (originalOwner != null) {
+                                        plugin.getServer().getScheduler().runTask(plugin, () -> {
+                                            org.bukkit.OfflinePlayer owner = Bukkit.getOfflinePlayer(originalOwner);
+                                            if (owner.isOnline()) {
+                                                Player ownerPlayer = owner.getPlayer();
+                                                if (ownerPlayer != null && ownerPlayer.isOnline()) {
+                                                    ownerPlayer.sendMessage("");
+                                                    ownerPlayer.sendMessage("§b§l=== LAND RENTED ===");
+                                                    ownerPlayer.sendMessage("§aYour claim has been rented by a player!");
+                                                    ownerPlayer.sendMessage("§7Location: Claim #" + claimData.getClaimId());
+                                                    ownerPlayer.sendMessage("§7Renter: §e" + player.getName());
+                                                    ownerPlayer.sendMessage("§7Duration: §e" + messages.formatDuration(durationMillis));
+                                                    ownerPlayer.sendMessage("§7You earned: §e" + economyManager.formatAmount(price));
+                                                    ownerPlayer.sendMessage("§7Auto-renew: " + (config.isAutoRenewEnabled() ? "§aEnabled" : "§cDisabled"));
+                                                    ownerPlayer.sendMessage("§b§l===================");
+                                                    guiManager.playRentSuccessSound(ownerPlayer);
+                                                }
+                                            }
+                                        });
+                                    }
+
                                     return new RentResult(true, messages.getRentSuccess(messages.formatDuration(durationMillis)), claimData);
                                 });
                         });
@@ -171,7 +196,32 @@ public class RentManager {
                 claimData.setAutoRenew(config.isAutoRenewEnabled());
 
                 return storageManager.saveClaimData(claimData)
-                    .thenApply(v -> new RentResult(true, messages.getRentSuccess(messages.formatDuration(durationMillis)), claimData));
+                    .thenApply(v -> {
+                        plugin.getLogger().info("Rent started successfully for claim (no payment) " + claimData.getClaimId());
+
+                        // Notify the original owner that their claim has been rented
+                        if (originalOwner != null) {
+                            plugin.getServer().getScheduler().runTask(plugin, () -> {
+                                org.bukkit.OfflinePlayer owner = Bukkit.getOfflinePlayer(originalOwner);
+                                if (owner.isOnline()) {
+                                    Player ownerPlayer = owner.getPlayer();
+                                    if (ownerPlayer != null && ownerPlayer.isOnline()) {
+                                        ownerPlayer.sendMessage("");
+                                        ownerPlayer.sendMessage("§b§l=== LAND RENTED ===");
+                                        ownerPlayer.sendMessage("§aYour claim has been rented!");
+                                        ownerPlayer.sendMessage("§7Location: Claim #" + claimData.getClaimId());
+                                        ownerPlayer.sendMessage("§7Renter: §e" + player.getName());
+                                        ownerPlayer.sendMessage("§7Duration: §e" + messages.formatDuration(durationMillis));
+                                        ownerPlayer.sendMessage("§7Price: §cFREE (Admin/Bypass)");
+                                        ownerPlayer.sendMessage("§b§l===================");
+                                        guiManager.playRentSuccessSound(ownerPlayer);
+                                    }
+                                }
+                            });
+                        }
+
+                        return new RentResult(true, messages.getRentSuccess(messages.formatDuration(durationMillis)), claimData);
+                    });
             })
             .exceptionally(e -> {
                 plugin.getLogger().log(Level.SEVERE, "Error starting rent without payment", e);

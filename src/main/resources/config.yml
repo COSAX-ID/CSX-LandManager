@@ -78,7 +78,11 @@ claim:
   max-rent-duration: 0
 
   # Minimum rent duration in milliseconds
-  min-rent-duration: 3600000
+  # Examples:
+  # 1 minute = 60000
+  # 1 hour = 3600000
+  # 1 day = 86400000
+  min-rent-duration: 60000
 
 # Debug mode
 debug: false

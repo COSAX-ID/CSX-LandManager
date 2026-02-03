@@ -98,7 +98,7 @@ public class Config {
         this.minSellPrice = config.getDouble("claim.min-sell-price", 0.0);
         this.maxSellPrice = config.getDouble("claim.max-sell-price", 0.0);
         this.maxRentDuration = config.getLong("claim.max-rent-duration", 0);
-        this.minRentDuration = config.getLong("claim.min-rent-duration", 3600000L); // 1 hour
+        this.minRentDuration = config.getLong("claim.min-rent-duration", 60000L); // 1 minute
 
         // Debug
         this.debug = config.getBoolean("debug", false);

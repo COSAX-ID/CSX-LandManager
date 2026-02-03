@@ -915,6 +915,28 @@ public class ClaimGUI {
                                     player.closeInventory();
                                 });
                                 plugin.getLogger().info("Purchase successful! Claim transferred to " + player.getName());
+
+                                // Notify the seller (previous owner)
+                                UUID previousOwner = claimData.getOwner();
+                                if (previousOwner != null) {
+                                    org.bukkit.OfflinePlayer seller = Bukkit.getOfflinePlayer(previousOwner);
+                                    if (seller.isOnline()) {
+                                        plugin.getServer().getScheduler().runTask(plugin, () -> {
+                                            Player sellerPlayer = seller.getPlayer();
+                                            if (sellerPlayer != null) {
+                                                sellerPlayer.sendMessage("");
+                                                sellerPlayer.sendMessage("§6§l=== LAND SOLD ===");
+                                                sellerPlayer.sendMessage("§aYour claim has been purchased!");
+                                                sellerPlayer.sendMessage("§7Location: Claim #" + claim.getID());
+                                                sellerPlayer.sendMessage("§7Buyer: §e" + player.getName());
+                                                sellerPlayer.sendMessage("§7You received: §e" + economyManager.formatAmount(price));
+                                                sellerPlayer.sendMessage("§6§l===================");
+                                                guiManager.playBuySuccessSound(sellerPlayer);
+                                            }
+                                        });
+                                    }
+                                }
+
                                 return new ClickResult(GUIAction.BUY, messages.getBuySuccess(price));
                             } else {
                                 plugin.getLogger().severe("Ownership transfer failed after payment!");
