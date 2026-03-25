@@ -7,14 +7,9 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                withEnv([
-                    "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
-                    "PATH=/usr/lib/jvm/java-21-openjdk/bin:$PATH"
-                ]) {
-                    sh 'echo JAVA_HOME is $JAVA_HOME'
-                    sh 'java -version'
-                    sh 'mvn clean package -DskipTests'
-                }
+                sh 'echo JAVA_HOME is $JAVA_HOME'
+                sh 'java -version'
+                sh 'mvn clean package -DskipTests'
             }
         }
     }
