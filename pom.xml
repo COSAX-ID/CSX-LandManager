@@ -113,12 +113,12 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- HikariCP - Connection pooling (provided by Paper/Spigot) -->
+        <!-- HikariCP - Connection pooling (shaded) -->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>5.1.0</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
 
         <!-- H2 Database (provided by server or install separately) -->
