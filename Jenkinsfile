@@ -10,8 +10,8 @@ pipeline {
                 sh '''
                     echo "JAVA_HOME is $JAVA_HOME"
                     echo "PATH is $PATH"
-                    $JAVA_HOME/bin/java -version
-                    $JAVA_HOME/bin/java -version 2>&1 | head -1
+                    which java
+                    java -version
                     mvn clean package -DskipTests
                 '''
             }
