@@ -1,10 +1,22 @@
 pipeline {
     agent any
     tools {
-        jdk 'JDK_21'             // sesuai Global Tool Configuration
-        maven 'maven-3.9.14'     // sesuai Global Tool Configuration
+        jdk 'JDK_21'
+        maven 'maven-3.9.14'
     }
+
+    environment {
+        MAVEN_OPTS = '-Dmaven.repo.local=./.m2/repository'
+    }
+
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+                echo "Building branch: ${env.BRANCH_NAME}"
+            }
+        }
+
         stage('Build') {
             steps {
                 sh '''
@@ -27,6 +39,43 @@ pipeline {
                     mvn clean package -DskipTests
                 '''
             }
+            post {
+                success {
+                    archiveArtifacts artifacts: 'target/*.jar', fingerprint: true, allowEmptyArchive: true
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
+                }
+            }
+        }
+
+        stage('Code Quality') {
+            steps {
+                sh 'mvn checkstyle:check -q || true'
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+        success {
+            echo "Build succeeded for ${env.BRANCH_NAME}"
+        }
+        failure {
+            echo "Build failed for ${env.BRANCH_NAME}"
+        }
+        unstable {
+            echo "Build unstable for ${env.BRANCH_NAME}"
         }
     }
 }
