@@ -2,14 +2,13 @@
 
 <div align="center">
 
-![CSX LandManager](https://img.shields.io/badge/CSX-LandManager-1.2.8-brightgreen?style=for-the-badge)
-![Version](https://img.shields.io/badge/Minecraft-1.21.x-orange?style=for-the-badge&logo=minecraft)
+![Minecraft](https://img.shields.io/badge/Minecraft-1.21.x-orange?style=for-the-badge&logo=minecraft)
 ![Java](https://img.shields.io/badge/Java-21-red?style=for-the-badge&logo=openjdk)
-![License](https://img.shields.io/badge/License-Apache%202.0-blue?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 **A comprehensive GriefPrevention addon plugin for Minecraft 1.21.x that provides GUI-based land management with rent, buy, sell functionality and automatic ownership transfer during rental periods.**
 
-[Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Configuration](#-configuration) • [Permissions](#-permissions) • [Changelog](#-changelog) • [Building](#-building) • [Contributing](#-contributing) • [License](#-license)
+[Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Configuration](#-configuration) • [Permissions](#-permissions) • [Changelog](CHANGELOG.md) • [Building](#-building) • [Contributing](#-contributing) • [License](#-license)
 
 </div>
 
@@ -87,7 +86,7 @@
    - Install an economy plugin (EssentialsX recommended)
 
 2. **Install CSX Land Manager:**
-   - Download the latest `CSXLandManager-1.2.8.jar` from [Releases](https://github.com/minggudevv/CSX-Land-Manager/releases)
+   - Download the latest JAR file from [Releases](https://github.com/COSAX-ID/CSX-Land-Manager/releases)
    - Place the JAR file in your server's `plugins/` folder
    - Restart the server
 
@@ -325,47 +324,9 @@ lp superadmin permission set landmgmt.bypass true
 
 ---
 
-## 📅 Changelog
+## 📜 Changelog
 
-### v1.2.8 - Current Release
-**Payment System Overhaul**
-- ✨ **NEW**: `landmgmt.bypass` permission for payment bypass
-- 🔄 Admins now pay for transactions unless they have bypass permission
-- 💰 Better economy flow and server balance
-- 📝 Updated all payment checks (buy, rent, extend)
-
-### v1.2.7
-**GUI & Inventory Fixes**
-- 🐛 Fixed `InventoryCloseEvent` synchronous errors
-- ✅ Improved GUI reliability and consistency
-- 🔧 Better async handling for GUI operations
-- 📊 Enhanced error handling
-
-### v1.2.6
-**Database Migration**
-- 🗄️ Automatic database schema migration
-- 🔄 Backward compatibility with older databases
-- ✅ Dynamic INSERT statements for old/new schemas
-
-### v1.2.5
-**Vault API Fixes**
-- 💰 Fixed auto-renew money disappearing bug
-- 📊 Improved transaction logging
-- 🔍 Better economy provider detection (EssentialsX, CMI)
-- ⚠️ Comprehensive payment debugging
-
-### v1.2.4
-**Rent System Enhancements**
-- 🔄 Ownership transfer during rental period
-- 👤 Original owner saved and restored on expiration
-- ⏱️ Added minutes as rent duration option
-- 📦 Updated storage layer for original owner field
-
-### v1.2.3
-**GriefPrevention Compatibility**
-- 🔧 Multiple fallback methods for ownership transfer
-- 🛠️ Better compatibility with different GriefPrevention versions
-- 📝 Improved error diagnostics
+See [CHANGELOG.md](CHANGELOG.md) for the full changelog.
 
 ---
 
@@ -380,13 +341,13 @@ lp superadmin permission set landmgmt.bypass true
 
 ```bash
 # Clone repository
-git clone https://github.com/minggudevv/CSX-Land-Manager.git
+git clone https://github.com/COSAX-ID/CSX-Land-Manager.git
 cd CSX-Land-Manager
 
 # Build plugin
 mvn clean package
 
-# Output: target/CSXLandManager-1.2.8.jar
+# Output: target/CSXLandManager.jar
 ```
 
 ### Development Setup
@@ -512,32 +473,15 @@ CSXLandManager/
 
 ## 📄 License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
-
-```
-Copyright 2025 cosaxid
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-```
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
 ## 👨‍💻 Credits
 
 ### Development
-- **Author:** [cosaxid](https://cosax.alfikz.my.id)
-- **Version:** 1.2.8
-- **Repository:** [minggudevv/CSX-Land-Manager](https://github.com/minggudevv/CSX-Land-Manager)
+- **Organization:** [COSAX-ID](https://github.com/COSAX-ID)
+- **Repository:** [COSAX-ID/CSX-Land-Manager](https://github.com/COSAX-ID/CSX-Land-Manager)
 
 ### Built With
 - [Spigot/Paper API](https://www.spigotmc.org/) - Minecraft Server API
@@ -578,10 +522,9 @@ limitations under the License.
 
 ## 📞 Support
 
-- 🐛 **Report Issues:** [GitHub Issues](https://github.com/minggudevv/CSX-Land-Manager/issues)
-- 💬 **Discussions:** [GitHub Discussions](https://github.com/minggudevv/CSX-Land-Manager/discussions)
-- 📖 **Documentation:** [Project Wiki](https://github.com/minggudevv/CSX-Land-Manager/wiki)
-- 📧 **Contact:** [cosax.alfikz.my.id](https://cosax.alfikz.my.id)
+- 🐛 **Report Issues:** [GitHub Issues](https://github.com/COSAX-ID/CSX-Land-Manager/issues)
+- 💬 **Discussions:** [GitHub Discussions](https://github.com/COSAX-ID/CSX-Land-Manager/discussions)
+- 📖 **Documentation:** [Project Wiki](https://github.com/COSAX-ID/CSX-Land-Manager/wiki)
 
 ---
 
@@ -610,12 +553,11 @@ Contributions are welcome! Please follow these steps:
 
 ---
 
-## 💖 Donation
+## 💖 Support the Project
 
 If you enjoy this plugin, consider supporting the development:
 
-- **GitHub Sponsors:** [Sponsor page](https://github.com/sponsors/minggudevv)
-- **Trakteer:** [Link here if available]
+- **GitHub Sponsors:** [Sponsor page](https://github.com/sponsors/COSAX-ID)
 
 Your support helps keep this project updated and maintained! ❤️
 
@@ -629,8 +571,8 @@ Your support helps keep this project updated and maintained! ❤️
 
 [⬆ Back to Top](#csx-land-manager)
 
-![GitHub stars](https://img.shields.io/github/stars/minggudevv/CSX-Land-Manager?style=social)
-![GitHub forks](https://img.shields.io/github/forks/minggudevv/CSX-Land-Manager?style=social)
-![GitHub issues](https://img.shields.io/github/issues/minggudevv/CSX-Land-Manager)
+![GitHub stars](https://img.shields.io/github/stars/COSAX-ID/CSX-Land-Manager?style=social)
+![GitHub forks](https://img.shields.io/github/forks/COSAX-ID/CSX-Land-Manager?style=social)
+![GitHub issues](https://img.shields.io/github/issues/COSAX-ID/CSX-Land-Manager)
 
 </div>
