@@ -8,10 +8,22 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                    echo "JAVA_HOME is $JAVA_HOME"
-                    echo "PATH is $PATH"
-                    which java
-                    java -version
+                    # Detect Java installation
+                    if [ -n "$JAVA_HOME" ] && [ -x "$JAVA_HOME/bin/java" ]; then
+                        echo "Using JAVA_HOME: $JAVA_HOME"
+                        export JAVA="$JAVA_HOME/bin/java"
+                    elif [ -x "/usr/bin/java" ]; then
+                        echo "Using system Java at /usr/bin/java"
+                        export JAVA_HOME=$(readlink -f /usr/bin/java | sed 's:/bin/java::')
+                        export JAVA="/usr/bin/java"
+                    else
+                        echo "Using java from PATH"
+                        export JAVA=$(which java)
+                        export JAVA_HOME=$(readlink -f $(which java) | sed 's:/bin/java::')
+                    fi
+                    echo "JAVA_HOME: $JAVA_HOME"
+                    echo "JAVA: $JAVA"
+                    $JAVA -version
                     mvn clean package -DskipTests
                 '''
             }
