@@ -69,9 +69,10 @@ public class LandManagementCommand implements CommandExecutor, TabCompleter {
             case "sell", "setsellprice" -> handleSetSellPrice(player, args);
             case "unsell", "removeforsale" -> handleUnsell(player);
             case "cancelrent" -> handleCancelRent(player);
+            case "shop" -> handleShop(player);
             case "reload" -> handleReload(player);
             default -> {
-                player.sendMessage("§cUnknown subcommand. Use: /" + label + " [setprice|sell|unsell|cancelrent]");
+                player.sendMessage("§cUnknown subcommand. Use: /" + label + " [setprice|sell|unsell|cancelrent|shop]");
                 guiManager.playErrorSound(player);
                 yield true;
             }
@@ -318,6 +319,29 @@ public class LandManagementCommand implements CommandExecutor, TabCompleter {
     }
 
     /**
+     * Handles the shop subcommand.
+     * Usage: /landmanagement shop
+     */
+    private boolean handleShop(Player player) {
+        if (!player.hasPermission("landmgmt.shop")) {
+            player.sendMessage(messages.getNoPermission());
+            guiManager.playErrorSound(player);
+            return true;
+        }
+
+        // Check if shop is enabled
+        if (!config.isShopEnabled()) {
+            player.sendMessage("§cShop feature is disabled.");
+            guiManager.playErrorSound(player);
+            return true;
+        }
+
+        // Open shop GUI
+        new dev.cosax.cSXLandManager.gui.ShopGUI(plugin).open(player);
+        return true;
+    }
+
+    /**
      * Handles the reload subcommand.
      */
     private boolean handleReload(Player player) {
@@ -345,6 +369,9 @@ public class LandManagementCommand implements CommandExecutor, TabCompleter {
                 completions.add("setprice");
                 completions.add("sell");
                 completions.add("unsell");
+            }
+            if (sender.hasPermission("landmgmt.shop")) {
+                completions.add("shop");
             }
             if (sender.hasPermission("landmgmt.admin")) {
                 completions.add("cancelrent");

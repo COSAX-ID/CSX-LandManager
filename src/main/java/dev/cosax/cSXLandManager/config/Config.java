@@ -31,6 +31,11 @@ public class Config {
     private long minRentDuration;
     private boolean debug;
 
+    // Shop settings
+    private boolean shopEnabled;
+    private int shopGuiSize;
+    private int shopItemsPerPage;
+
     // Database settings
     private String dbHost;
     private int dbPort;
@@ -102,6 +107,11 @@ public class Config {
 
         // Debug
         this.debug = config.getBoolean("debug", false);
+
+        // Shop settings
+        this.shopEnabled = config.getBoolean("shop.enabled", true);
+        this.shopGuiSize = config.getInt("shop.gui-size", 54);
+        this.shopItemsPerPage = config.getInt("shop.items-per-page", 45);
     }
 
     // Getters
@@ -163,6 +173,11 @@ public class Config {
     public String getSoundBuySuccess() {
         return config.getString("gui.sounds.buy-success", "ENTITY_PLAYER_LEVELUP");
     }
+
+    // Shop getters
+    public boolean isShopEnabled() { return shopEnabled; }
+    public int getShopGuiSize() { return shopGuiSize; }
+    public int getShopItemsPerPage() { return shopItemsPerPage; }
 
     /**
      * Colorizes a string using Bukkit's color codes.

@@ -368,6 +368,87 @@ public class Messages {
         return getRawMessage("gui.lore-auto-renew-disabled");
     }
 
+    // Shop messages
+    public String getShopTitle() {
+        return getRawMessage("shop.title");
+    }
+
+    public String getShopTeleport() {
+        return getMessage("shop.teleport");
+    }
+
+    public String getShopBuyConfirm() {
+        return getRawMessage("shop.buy-confirm");
+    }
+
+    public String getShopRentConfirm() {
+        return getRawMessage("shop.rent-confirm");
+    }
+
+    public String getShopNoListings() {
+        return getMessage("shop.no-listings");
+    }
+
+    public String getShopClaimItemLoreOwner() {
+        return getRawMessage("shop.claim-item-lore-owner");
+    }
+
+    public String getShopClaimItemLoreLocation() {
+        return getRawMessage("shop.claim-item-lore-location");
+    }
+
+    public String getShopClaimItemLoreSize() {
+        return getRawMessage("shop.claim-item-lore-size");
+    }
+
+    public String getShopClaimItemLorePrice() {
+        return getRawMessage("shop.claim-item-lore-price");
+    }
+
+    public String getShopClaimItemLoreRent() {
+        return getRawMessage("shop.claim-item-lore-rent");
+    }
+
+    public String getShopClaimItemLoreLeft() {
+        return getRawMessage("shop.claim-item-lore-left");
+    }
+
+    public String getShopClaimItemLoreBuy() {
+        return getRawMessage("shop.claim-item-lore-buy");
+    }
+
+    public String getShopConfirmTitle() {
+        return getRawMessage("shop.confirm-title");
+    }
+
+    public String getShopConfirmLoreSize() {
+        return getRawMessage("shop.confirm-lore-size");
+    }
+
+    public String getShopConfirmLoreLocation() {
+        return getRawMessage("shop.confirm-lore-location");
+    }
+
+    public String getShopConfirmLorePrice() {
+        return getRawMessage("shop.confirm-lore-price");
+    }
+
+    public String getShopConfirmLoreDuration() {
+        return getRawMessage("shop.confirm-lore-duration");
+    }
+
+    public String getShopConfirmLoreTotal() {
+        return getRawMessage("shop.confirm-lore-total");
+    }
+
+    public String getShopConfirmConfirm() {
+        return getRawMessage("shop.confirm-confirm");
+    }
+
+    public String getShopConfirmCancel() {
+        return getRawMessage("shop.confirm-cancel");
+    }
+
     // Admin messages
     public String getAdminOnly() {
         return getMessage("admin-only");

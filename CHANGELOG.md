@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.2] - Build Fix Release
+
+### Fixed
+- 🔧 Fixed missing HikariCP dependency in shaded JAR (`NoClassDefFoundError: com.zaxxer.hikari.HikariConfig`)
+- 🔧 Fixed H2 database shading compatibility issue (`ClassNotFoundException: org.h2.mvstore.db.NullValueDataType`)
+- 📦 Updated Maven Shade Plugin configuration to properly bundle dependencies
+
+### Changed
+- H2 Database now bundled without relocation to maintain database file compatibility
+- HikariCP relocated to `dev.cosax.cSXLandManager.libs.hikari`
+
+---
+
 ## [1.0.0] - Initial Release
 
 ### Added

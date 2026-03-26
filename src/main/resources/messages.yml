@@ -83,6 +83,29 @@ gui:
   lore-auto-renew-enabled: "&7Auto-renew is &aenabled"
   lore-auto-renew-disabled: "&7Auto-renew is &cdisabled"
 
+# Shop messages
+shop:
+  title: "&6&lLand Shop"
+  teleport: "&aTeleported to claim location!"
+  buy-confirm: "&eConfirm purchase?"
+  rent-confirm: "&eConfirm rent?"
+  no-listings: "&cNo claims available in shop."
+  claim-item-lore-owner: "&7Owner: &f{owner}"
+  claim-item-lore-location: "&7Location: &f{world} ({x}, {z})"
+  claim-item-lore-size: "&7Size: &f{size} blocks"
+  claim-item-lore-price: "&7Price: &f{price}"
+  claim-item-lore-rent: "&7Rent: &f{rentPrice} / {duration}"
+  claim-item-lore-left: "&7Right-click to teleport"
+  claim-item-lore-buy: "&7Left-click to {action}"
+  confirm-title: "&eConfirm Action"
+  confirm-lore-size: "&7Size: &f{size} blocks"
+  confirm-lore-location: "&7Location: &f{world} ({x}, {z})"
+  confirm-lore-price: "&7Price: &f{price}"
+  confirm-lore-duration: "&7Duration: &f{duration}"
+  confirm-lore-total: "&7Total: &f{total}"
+  confirm-confirm: "&a&lCLICK TO CONFIRM"
+  confirm-cancel: "&c&lCLICK TO CANCEL"
+
 # Time formats
 time:
   format: "{days}d {hours}h {minutes}m {seconds}s"

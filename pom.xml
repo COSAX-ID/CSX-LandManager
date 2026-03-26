@@ -6,7 +6,7 @@
 
     <groupId>dev.cosax</groupId>
     <artifactId>CSXLandManager</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>CSXLandManager</name>
@@ -39,6 +39,9 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
+                            <createDependencyReducedPom>true</createDependencyReducedPom>
+                            <dependencyReducedPomLocation>${java.io.tmpdir}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
                             <relocations>
                                 <relocation>
                                     <pattern>com.zaxxer.hikari</pattern>
@@ -121,12 +124,12 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- H2 Database (provided by server or install separately) -->
+        <!-- H2 Database (shaded into plugin) -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>2.2.224</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
 
         <!-- SQLite JDBC (provided by Spigot/Paper) -->

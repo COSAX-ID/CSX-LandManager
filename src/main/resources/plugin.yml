@@ -1,5 +1,5 @@
 name: CSXLandManager
-version: '1.3.0'
+version: '1.0.2-SNAPSHOT'
 main: dev.cosax.cSXLandManager.CSXLandManager
 api-version: '1.20'
 load: POSTWORLD
@@ -14,7 +14,7 @@ softdepend:
 commands:
   landmanagement:
     description: Open the land management GUI or manage claim settings
-    usage: /landmanagement [setprice|sell|unsell|cancelrent] [price]
+    usage: /landmanagement [setprice|sell|unsell|cancelrent|shop] [price]
     aliases: [landmgmt, lm, landm]
 
 permissions:
@@ -36,6 +36,9 @@ permissions:
   landmgmt.bypass:
     description: Bypass all payment requirements (free rent/buy/sell)
     default: false
+  landmgmt.shop:
+    description: Allows accessing the land shop GUI
+    default: true
   landmgmt.admin:
     description: Administrative permissions - cancel rents, set prices
     default: op

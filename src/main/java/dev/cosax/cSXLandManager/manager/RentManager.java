@@ -44,7 +44,13 @@ public class RentManager {
      * Starts a rent for a claim.
      */
     public CompletableFuture<RentResult> startRent(Player player, ClaimData claimData, long durationMillis) {
-        // Validate duration
+        // Validate duration - REQUIRED in 1.0.2+
+        if (durationMillis <= 0) {
+            return CompletableFuture.completedFuture(
+                new RentResult(false, "§cRent duration must be selected! Please choose a duration first.", null)
+            );
+        }
+
         if (durationMillis < config.getMinRentDuration()) {
             return CompletableFuture.completedFuture(
                 new RentResult(false, "Rent duration too short", null)

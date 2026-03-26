@@ -84,5 +84,16 @@ claim:
   # 1 day = 86400000
   min-rent-duration: 60000
 
+# Shop settings
+shop:
+  # Enable /lm shop command
+  enabled: true
+
+  # Shop GUI size (must be multiple of 9, max 54)
+  gui-size: 54
+
+  # Items per page in shop GUI
+  items-per-page: 45
+
 # Debug mode
 debug: false

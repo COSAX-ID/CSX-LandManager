@@ -813,7 +813,7 @@ public class ClaimGUI {
             return CompletableFuture.completedFuture(new ClickResult(null, "Already renting"));
         }
 
-        // Check if duration is set
+        // Check if duration is set - REQUIRED in 1.0.2+
         if (claimData.getRentDuration() <= 0) {
             player.sendMessage("§cPlease set rent duration first!");
             player.sendMessage("§7Click the 'Set Duration' button.");
@@ -821,20 +821,12 @@ public class ClaimGUI {
             return CompletableFuture.completedFuture(new ClickResult(null, "Duration not set"));
         }
 
-        plugin.getLogger().info("Rent validation passed, starting rent process...");
+        // Open confirmation GUI
+        plugin.getLogger().info("Opening rent confirmation GUI for " + player.getName());
+        ConfirmationGUI confirmationGUI = new ConfirmationGUI(plugin, claimData, ConfirmationGUI.ActionType.RENT, claimData.getRentDuration());
+        confirmationGUI.open(player);
 
-        return rentManager.startRent(player, claimData, claimData.getRentDuration())
-                .thenApply(result -> {
-                    if (result.success()) {
-                        guiManager.playRentSuccessSound(player);
-                        plugin.getLogger().info("Rent successful for " + player.getName());
-                        return new ClickResult(GUIAction.RENT, result.message());
-                    } else {
-                        guiManager.playErrorSound(player);
-                        plugin.getLogger().warning("Rent failed for " + player.getName() + ": " + result.message());
-                        return new ClickResult(null, result.message());
-                    }
-                });
+        return CompletableFuture.completedFuture(new ClickResult(null, null));
     }
 
     /**
@@ -879,99 +871,12 @@ public class ClaimGUI {
             return CompletableFuture.completedFuture(new ClickResult(null, "Not for sale"));
         }
 
-        // Process payment ATOMICALLY using processPayment
-        // Payment is only bypassed if player has landmgmt.bypass permission
-        if (economyManager.isAvailable() && price > 0 && !player.hasPermission("landmgmt.bypass")) {
-            if (claimData.getOwner() == null) {
-                player.sendMessage("§cCannot buy: No owner found!");
-                guiManager.playErrorSound(player);
-                return CompletableFuture.completedFuture(new ClickResult(null, "No owner"));
-            }
+        // Open confirmation GUI
+        plugin.getLogger().info("Opening buy confirmation GUI for " + player.getName());
+        ConfirmationGUI confirmationGUI = new ConfirmationGUI(plugin, claimData, ConfirmationGUI.ActionType.BUY, 0);
+        confirmationGUI.open(player);
 
-            plugin.getLogger().info("Processing payment for purchase...");
-
-            // Use atomic processPayment
-            return economyManager.processPayment(
-                    player.getUniqueId(),
-                    claimData.getOwner(),
-                    price,
-                    "Purchase of claim " + claimData.getClaimId()
-                ).thenCompose(paymentResult -> {
-                    if (!paymentResult.success()) {
-                        plugin.getLogger().warning("Purchase payment failed: " + paymentResult.message());
-                        guiManager.playErrorSound(player);
-                        return CompletableFuture.completedFuture(new ClickResult(null, messages.getBuyFailed(paymentResult.message())));
-                    }
-
-                    plugin.getLogger().info("Payment successful! Transferring ownership...");
-
-                    // Payment successful, now transfer ownership
-                    return claimManager.transferOwnership(claim, player.getUniqueId())
-                        .thenApply(success -> {
-                            if (success) {
-                                guiManager.playBuySuccessSound(player);
-                                // Close inventory synchronously on main thread
-                                plugin.getServer().getScheduler().runTask(plugin, () -> {
-                                    player.closeInventory();
-                                });
-                                plugin.getLogger().info("Purchase successful! Claim transferred to " + player.getName());
-
-                                // Notify the seller (previous owner)
-                                UUID previousOwner = claimData.getOwner();
-                                if (previousOwner != null) {
-                                    org.bukkit.OfflinePlayer seller = Bukkit.getOfflinePlayer(previousOwner);
-                                    if (seller.isOnline()) {
-                                        plugin.getServer().getScheduler().runTask(plugin, () -> {
-                                            Player sellerPlayer = seller.getPlayer();
-                                            if (sellerPlayer != null) {
-                                                sellerPlayer.sendMessage("");
-                                                sellerPlayer.sendMessage("§6§l=== LAND SOLD ===");
-                                                sellerPlayer.sendMessage("§aYour claim has been purchased!");
-                                                sellerPlayer.sendMessage("§7Location: Claim #" + claim.getID());
-                                                sellerPlayer.sendMessage("§7Buyer: §e" + player.getName());
-                                                sellerPlayer.sendMessage("§7You received: §e" + economyManager.formatAmount(price));
-                                                sellerPlayer.sendMessage("§6§l===================");
-                                                guiManager.playBuySuccessSound(sellerPlayer);
-                                            }
-                                        });
-                                    }
-                                }
-
-                                return new ClickResult(GUIAction.BUY, messages.getBuySuccess(price));
-                            } else {
-                                plugin.getLogger().severe("Ownership transfer failed after payment!");
-                                // Refund buyer since transfer failed
-                                economyManager.depositPlayer(player, price);
-                                return new ClickResult(null, messages.getBuyFailed("Transfer failed - refunded"));
-                            }
-                        });
-                })
-                .exceptionally(e -> {
-                    plugin.getLogger().log(Level.SEVERE, "Error processing purchase", e);
-                    guiManager.playErrorSound(player);
-                    return new ClickResult(null, messages.getErrorOccurred());
-                });
-        }
-
-        // Free transfer (has bypass permission or price=0)
-        String bypassReason = player.hasPermission("landmgmt.bypass") ? "has bypass permission" : "price is 0";
-        plugin.getLogger().info("No payment needed (player " + bypassReason + "), transferring ownership...");
-
-        return claimManager.transferOwnership(claim, player.getUniqueId())
-            .thenApply(success -> {
-                if (success) {
-                    guiManager.playBuySuccessSound(player);
-                    // Close inventory synchronously on main thread
-                    plugin.getServer().getScheduler().runTask(plugin, () -> {
-                        player.closeInventory();
-                    });
-                    plugin.getLogger().info("Transfer successful!");
-                    return new ClickResult(GUIAction.BUY, "§aClaim transferred successfully!");
-                } else {
-                    plugin.getLogger().severe("Transfer failed!");
-                    return new ClickResult(null, messages.getBuyFailed("Transfer failed"));
-                }
-            });
+        return CompletableFuture.completedFuture(new ClickResult(null, null));
     }
 
     /**
