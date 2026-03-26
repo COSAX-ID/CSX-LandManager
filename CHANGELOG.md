@@ -49,6 +49,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Release Date | Key Changes |
 |---------|-------------|-------------|
+| 1.0.3 | 2026 | Shop ownership validation, .qwen/ gitignore |
+| 1.0.2 | 2026 | HikariCP & H2 dependency bundling fix |
 | 1.0.0 | 2026 | Initial release with core land management features |
 
 ---
