@@ -97,6 +97,9 @@ $RECYCLE.BIN/
 
 target/
 
+# Qwen IDE settings
+.qwen/
+
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.3] - Shop & GUI Improvements
+
+### Added
+- 🛡️ Ownership validation in shop - prevents buying own claims
+
+### Fixed
+- 📁 Added .qwen/ directory to .gitignore
+
 ## [1.0.2] - Build Fix Release
 
 ### Fixed

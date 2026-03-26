@@ -297,6 +297,14 @@ public class ShopGUI {
             int index = (currentPage * itemsPerPage) + slot;
             if (index < availableClaims.size()) {
                 ClaimData claimData = availableClaims.get(index);
+                
+                // Check if player is the owner
+                if (claimData.isOwner(player.getUniqueId())) {
+                    player.sendMessage("§cThis is your land, cannot buy it!");
+                    guiManager.playErrorSound(player);
+                    return CompletableFuture.completedFuture(new ShopClickResult(null, null, currentPage));
+                }
+                
                 return CompletableFuture.completedFuture(new ShopClickResult(ShopAction.CLAIM_CLICKED, claimData, currentPage));
             }
         }
