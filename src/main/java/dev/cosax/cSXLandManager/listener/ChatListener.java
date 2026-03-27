@@ -389,9 +389,22 @@ public class ChatListener implements Listener {
             if (inputType == PriceInputType.SET_RENT_PRICE) {
                 player.sendMessage("§aRent price set to §f" + plugin.getEconomyManager().formatAmount(price) + "§a!");
                 if (price > 0) {
-                    player.sendMessage("§eClaim is now available for rent.");
+                    player.sendMessage("§eNow set rent duration!");
+                    // Register for duration input and prompt player
+                    registerDurationInputSimple(player);
+                    plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+                        player.sendMessage("§e=== Set Rent Duration ===");
+                        player.sendMessage("§7Enter duration (number + unit):");
+                        player.sendMessage("§7Examples: §f7d, 2w, 1m, 24h");
+                        player.sendMessage("§7  §f7 days, 2 weeks, 1 month");
+                        player.sendMessage("§7Units: §fh(hours) d(days) w(weeks) m(months)");
+                        player.sendMessage("§7Type §ccancel §7to cancel");
+                        player.sendMessage("");
+                        player.sendMessage("§aWaiting for input...");
+                    }, 5L);
+                } else {
+                    plugin.getGUIManager().playSuccessSound(player);
                 }
-                plugin.getGUIManager().playSuccessSound(player);
             } else if (inputType == PriceInputType.SET_SELL_PRICE) {
                 if (price > 0) {
                     player.sendMessage("§aClaim listed for sale at §f" + plugin.getEconomyManager().formatAmount(price) + "§a!");
@@ -401,10 +414,12 @@ public class ChatListener implements Listener {
                 plugin.getGUIManager().playSuccessSound(player);
             }
 
-            // Reopen GUI after setting price with fresh data
-            plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-                plugin.getGUIManager().openLandGUI(player, finalClaim);
-            }, 10L);
+            // Reopen GUI after setting price with fresh data (only for sell price)
+            if (inputType != PriceInputType.SET_RENT_PRICE || price <= 0) {
+                plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+                    plugin.getGUIManager().openLandGUI(player, finalClaim);
+                }, 10L);
+            }
         }).exceptionally(e -> {
             plugin.getLogger().log(Level.SEVERE, "Failed to set price", e);
             player.sendMessage("§cFailed to set price!");
@@ -450,6 +465,17 @@ public class ChatListener implements Listener {
                 player.sendMessage("§7Examples: §f7d, 2w, 1m, 24h");
                 player.sendMessage("§7  §f7 days, 2 weeks, 1 month");
                 player.sendMessage("§7Units: §fh(hours) d(days) w(weeks) m(months)");
+                plugin.getGUIManager().playErrorSound(player);
+            });
+            return;
+        }
+
+        // Validate minimum duration (1 minute = 60000ms)
+        long minDuration = 60000L; // 1 minute
+        if (durationMillis < minDuration) {
+            plugin.getServer().getScheduler().runTask(plugin, () -> {
+                player.sendMessage("§cDuration must be at least 1 minute!");
+                player.sendMessage("§7Please enter a duration of 1 minute or more.");
                 plugin.getGUIManager().playErrorSound(player);
             });
             return;

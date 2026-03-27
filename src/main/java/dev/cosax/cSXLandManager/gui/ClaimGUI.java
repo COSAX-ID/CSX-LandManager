@@ -1033,6 +1033,7 @@ public class ClaimGUI {
 
             claimData.setStatus(RentStatus.PRIVATE);
             claimData.setRentPrice(0);
+            claimData.setRentDuration(0);
             plugin.getStorageManager().saveClaimData(claimData).join();
 
             guiManager.playSuccessSound(player);

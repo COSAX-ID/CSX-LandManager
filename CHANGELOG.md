@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.4] - Rent Flow Improvements
+
+### Added
+- ⏱️ Auto-prompt for duration input after setting rent price
+- ✅ Minimum 1 minute duration validation
+
+### Changed
+- 🔄 Rent duration now resets when disabling renting
+- 💬 Chained chat input for price and duration setup
+
 ## [1.0.3] - Shop & GUI Improvements
 
 ### Added
@@ -49,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Release Date | Key Changes |
 |---------|-------------|-------------|
+| 1.0.4 | 2026 | Auto-prompt duration, min 1 min validation |
 | 1.0.3 | 2026 | Shop ownership validation, .qwen/ gitignore |
 | 1.0.2 | 2026 | HikariCP & H2 dependency bundling fix |
 | 1.0.0 | 2026 | Initial release with core land management features |

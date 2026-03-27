@@ -1,5 +1,5 @@
 name: CSXLandManager
-version: '1.0.3'
+version: '1.0.4'
 main: dev.cosax.cSXLandManager.CSXLandManager
 api-version: '1.20'
 load: POSTWORLD
