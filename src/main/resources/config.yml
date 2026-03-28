@@ -1,5 +1,11 @@
 # CSX LandManager Configuration File
 
+# Metrics settings (bStats)
+metrics:
+  # Enable or disable bStats metrics
+  # Learn more at https://bstats.org/
+  enabled: true
+
 # Storage type: YAML, SQLite, H2, MySQL, or MariaDB
 storage:
   type: H2

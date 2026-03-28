@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.5] - bStats Metrics Integration
+
+### Added
+- 📊 bStats metrics integration for plugin analytics
+- ⚙️ Config option to enable/disable metrics (`metrics.enabled`)
+- 📈 Custom chart support for tracking plugin usage
+
+### Changed
+- 📦 bStats library relocated to `dev.cosax.cSXLandManager.libs.bstats` to avoid conflicts
+
+---
+
 ## [1.0.4] - Rent Flow Improvements
 
 ### Added
@@ -59,6 +71,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Release Date | Key Changes |
 |---------|-------------|-------------|
+| 1.0.5 | 2026 | bStats metrics integration, config toggle |
 | 1.0.4 | 2026 | Auto-prompt duration, min 1 min validation |
 | 1.0.3 | 2026 | Shop ownership validation, .qwen/ gitignore |
 | 1.0.2 | 2026 | HikariCP & H2 dependency bundling fix |

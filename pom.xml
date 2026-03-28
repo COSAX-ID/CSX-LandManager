@@ -6,7 +6,7 @@
 
     <groupId>dev.cosax</groupId>
     <artifactId>CSXLandManager</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <packaging>jar</packaging>
 
     <name>CSXLandManager</name>
@@ -46,6 +46,10 @@
                                 <relocation>
                                     <pattern>com.zaxxer.hikari</pattern>
                                     <shadedPattern>dev.cosax.cSXLandManager.libs.hikari</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.bstats</pattern>
+                                    <shadedPattern>dev.cosax.cSXLandManager.libs.bstats</shadedPattern>
                                 </relocation>
                             </relocations>
                             <filters>
@@ -92,6 +96,14 @@
     </repositories>
 
     <dependencies>
+        <!-- bStats Metrics -->
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>3.2.1</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- Spigot API -->
         <dependency>
             <groupId>org.spigotmc</groupId>

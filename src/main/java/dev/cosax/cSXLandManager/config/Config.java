@@ -36,6 +36,9 @@ public class Config {
     private int shopGuiSize;
     private int shopItemsPerPage;
 
+    // Metrics settings
+    private boolean metricsEnabled;
+
     // Database settings
     private String dbHost;
     private int dbPort;
@@ -112,6 +115,9 @@ public class Config {
         this.shopEnabled = config.getBoolean("shop.enabled", true);
         this.shopGuiSize = config.getInt("shop.gui-size", 54);
         this.shopItemsPerPage = config.getInt("shop.items-per-page", 45);
+
+        // Metrics settings
+        this.metricsEnabled = config.getBoolean("metrics.enabled", true);
     }
 
     // Getters
@@ -178,6 +184,9 @@ public class Config {
     public boolean isShopEnabled() { return shopEnabled; }
     public int getShopGuiSize() { return shopGuiSize; }
     public int getShopItemsPerPage() { return shopItemsPerPage; }
+
+    // Metrics getter
+    public boolean isMetricsEnabled() { return metricsEnabled; }
 
     /**
      * Colorizes a string using Bukkit's color codes.

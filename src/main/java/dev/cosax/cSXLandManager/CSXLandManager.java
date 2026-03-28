@@ -16,6 +16,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 
 import java.util.logging.Level;
 
@@ -43,6 +45,9 @@ public final class CSXLandManager extends JavaPlugin {
     // Dependency status
     private boolean griefPreventionAvailable = false;
     private boolean vaultAvailable = false;
+
+    // Metrics
+    private Metrics metrics;
 
     @Override
     public void onEnable() {
@@ -74,6 +79,9 @@ public final class CSXLandManager extends JavaPlugin {
 
         // Start tasks
         startTasks();
+
+        // Initialize metrics
+        initializeMetrics();
 
         // Print startup completion
         long duration = System.currentTimeMillis() - startTime;
@@ -293,6 +301,22 @@ public final class CSXLandManager extends JavaPlugin {
         }
         if (messages != null) {
             messages.reload();
+        }
+    }
+
+    /**
+     * Initializes bStats metrics.
+     */
+    private void initializeMetrics() {
+        if (configManager != null && configManager.isMetricsEnabled()) {
+            int pluginId = 30441;
+            metrics = new Metrics(this, pluginId);
+            getLogger().info("Metrics enabled (bStats). Plugin ID: " + pluginId);
+
+            // Optional: Add custom charts
+            // metrics.addCustomChart(new SimplePie("chart_id", () -> "My value"));
+        } else {
+            getLogger().info("Metrics disabled in configuration.");
         }
     }
 }
