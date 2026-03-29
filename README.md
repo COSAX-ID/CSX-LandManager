@@ -5,7 +5,7 @@
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.x-orange?style=for-the-badge&logo=minecraft)
 ![Java](https://img.shields.io/badge/Java-21-red?style=for-the-badge&logo=openjdk)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
-![Version](https://img.shields.io/badge/Version-1.0.5-blue?style=for-the-badge)
+![Version](https://img.shields.io/badge/Version-1.0.0--beta-blue?style=for-the-badge)
 
 **A comprehensive GriefPrevention addon plugin for Minecraft 1.21.x that provides GUI-based land management with rent, buy, sell functionality and automatic ownership transfer during rental periods.**
 

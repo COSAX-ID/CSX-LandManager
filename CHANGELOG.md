@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.0-beta] - Beta Release
+
+### Added
+- 📊 bStats metrics integration for plugin analytics
+- ⚙️ Config option to enable/disable metrics (`metrics.enabled`)
+- 🔒 Security scanning in CI/CD pipeline (OWASP Dependency-Check, SpotBugs, Semgrep)
+- 📈 Custom chart support for tracking plugin usage
+
+### Changed
+- 📦 bStats library relocated to `dev.cosax.cSXLandManager.libs.bstats` to avoid conflicts
+- 🔗 Fixed GitHub repository URLs from CSX-Land-Manager to CSX-LandManager
+
+---
+
 ## [1.0.5] - bStats Metrics Integration
 
 ### Added
