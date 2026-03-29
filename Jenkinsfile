@@ -62,6 +62,51 @@ pipeline {
                 sh 'mvn checkstyle:check -q || true'
             }
         }
+
+        stage('Security Scan - OWASP Dependency Check') {
+            steps {
+                sh '''
+                    echo "Running OWASP Dependency-Check for vulnerability scanning..."
+                    mvn org.owasp:dependency-check-maven:check -DfailBuildOnCVSS=7 -DskipProvidedScope=true || true
+                '''
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'target/dependency-check-report.html', fingerprint: true, allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'target/dependency-check-report.xml', fingerprint: true, allowEmptyArchive: true
+                }
+            }
+        }
+
+        stage('Security Scan - SpotBugs') {
+            steps {
+                sh '''
+                    echo "Running SpotBugs for static code analysis and security vulnerabilities..."
+                    mvn com.github.spotbugs:spotbugs-maven-plugin:check -q || true
+                '''
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'target/spotbugsXml.xml', fingerprint: true, allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'target/spotbugs.html', fingerprint: true, allowEmptyArchive: true
+                }
+            }
+        }
+
+        stage('Security Scan - Semgrep') {
+            steps {
+                sh '''
+                    echo "Running Semgrep for security vulnerability detection..."
+                    # Install semgrep if not available
+                    if ! command -v semgrep &> /dev/null; then
+                        echo "Installing semgrep..."
+                        pip3 install semgrep || true
+                    fi
+                    # Run semgrep with security rules
+                    semgrep --config auto --error --quiet src/ || true
+                '''
+            }
+        }
     }
 
     post {

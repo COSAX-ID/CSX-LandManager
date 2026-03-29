@@ -87,7 +87,7 @@
    - Install an economy plugin (EssentialsX recommended)
 
 2. **Install CSX Land Manager:**
-   - Download the latest JAR file from [Releases](https://github.com/COSAX-ID/CSX-Land-Manager/releases)
+   - Download the latest JAR file from [Releases](https://github.com/COSAX-ID/CSX-LandManager/releases)
    - Place the JAR file in your server's `plugins/` folder
    - Restart the server
 
@@ -342,8 +342,8 @@ See [CHANGELOG.md](CHANGELOG.md) for the full changelog.
 
 ```bash
 # Clone repository
-git clone https://github.com/COSAX-ID/CSX-Land-Manager.git
-cd CSX-Land-Manager
+git clone https://github.com/COSAX-ID/CSX-LandManager.git
+cd CSX-LandManager
 
 # Build plugin
 mvn clean package
@@ -482,7 +482,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### Development
 - **Organization:** [COSAX-ID](https://github.com/COSAX-ID)
-- **Repository:** [COSAX-ID/CSX-Land-Manager](https://github.com/COSAX-ID/CSX-Land-Manager)
+- **Repository:** [COSAX-ID/CSX-LandManager](https://github.com/COSAX-ID/CSX-LandManager)
 
 ### Built With
 - [Spigot/Paper API](https://www.spigotmc.org/) - Minecraft Server API
@@ -524,9 +524,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- 🐛 **Report Issues:** [GitHub Issues](https://github.com/COSAX-ID/CSX-Land-Manager/issues)
-- 💬 **Discussions:** [GitHub Discussions](https://github.com/COSAX-ID/CSX-Land-Manager/discussions)
-- 📖 **Documentation:** [Project Wiki](https://github.com/COSAX-ID/CSX-Land-Manager/wiki)
+- 🐛 **Report Issues:** [GitHub Issues](https://github.com/COSAX-ID/CSX-LandManager/issues)
+- 💬 **Discussions:** [GitHub Discussions](https://github.com/COSAX-ID/CSX-LandManager/discussions)
+- 📖 **Documentation:** [Project Wiki](https://github.com/COSAX-ID/CSX-LandManager/wiki)
 
 ---
 
@@ -559,7 +559,7 @@ Contributions are welcome! Please follow these steps:
 
 If you enjoy this plugin, consider supporting the development:
 
-- **GitHub Sponsors:** [Sponsor page](https://github.com/sponsors/COSAX-ID)
+- **GitHub Sponsors:** [Sponsor page](https://github.com/sponsors/COSAX)
 
 Your support helps keep this project updated and maintained! ❤️
 
@@ -573,8 +573,8 @@ Your support helps keep this project updated and maintained! ❤️
 
 [⬆ Back to Top](#csx-land-manager)
 
-![GitHub stars](https://img.shields.io/github/stars/COSAX-ID/CSX-Land-Manager?style=social)
-![GitHub forks](https://img.shields.io/github/forks/COSAX-ID/CSX-Land-Manager?style=social)
-![GitHub issues](https://img.shields.io/github/issues/COSAX-ID/CSX-Land-Manager)
+![GitHub stars](https://img.shields.io/github/stars/COSAX-ID/CSX-LandManager?style=social)
+![GitHub forks](https://img.shields.io/github/forks/COSAX-ID/CSX-LandManager?style=social)
+![GitHub issues](https://img.shields.io/github/issues/COSAX-ID/CSX-LandManager)
 
 </div>
