@@ -1,11 +1,11 @@
 name: CSXLandManager
-version: '1.0.0-beta'
+version: '1.0.6-snapshot'
 main: dev.cosax.cSXLandManager.CSXLandManager
-api-version: '1.20'
+api-version: '1.21'
 load: POSTWORLD
 author: cosaxid
 description: A GriefPrevention addon that allows players to rent, buy, and sell claims through an interactive GUI with Vault economy support.
-website: cosax.alfikz.my.id
+website: cosax.id
 
 softdepend:
   - GriefPrevention

@@ -351,9 +351,9 @@ public class LandManagementCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
+        // plugin.reloadConfig() already calls config.reload() and messages.reload()
+        // No need to call them separately - this prevents circular reload issues
         plugin.reloadConfig();
-        config.reload();
-        messages.reload();
 
         player.sendMessage(messages.getPluginReloaded());
         guiManager.playSuccessSound(player);

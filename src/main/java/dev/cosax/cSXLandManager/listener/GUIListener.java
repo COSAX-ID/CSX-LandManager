@@ -19,6 +19,7 @@ import org.bukkit.inventory.Inventory;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
 /**
@@ -130,6 +131,7 @@ public class GUIListener implements Listener {
 
     /**
      * Handles buy confirmation from ConfirmationGUI.
+     * FIX: Properly updates claim data after ownership transfer.
      */
     private void handleBuyConfirmation(Player player, dev.cosax.cSXLandManager.model.ClaimData claimData) {
         plugin.getLogger().info("Processing buy confirmation for " + player.getName());
@@ -191,33 +193,47 @@ public class GUIListener implements Listener {
                         return;
                     }
 
+                    plugin.getLogger().info("Buy payment successful for " + player.getName() + ", transferring ownership...");
+
                     // Transfer ownership
                     plugin.getClaimManager().transferOwnership(claim, player.getUniqueId()).thenAccept(success -> {
                         plugin.getServer().getScheduler().runTask(plugin, () -> {
                             if (success) {
-                                player.sendMessage("§aYou have successfully purchased this claim for " + 
-                                    plugin.getEconomyManager().formatAmount(price) + "!");
-                                guiManager.playBuySuccessSound(player);
-                                player.closeInventory();
+                                // FIX: Update claim data with new owner
+                                claimData.setOwner(player.getUniqueId());
+                                claimData.setSellPrice(0);
+                                claimData.setStatus(dev.cosax.cSXLandManager.model.RentStatus.PRIVATE);
+                                claimData.setRenter(null);
+                                claimData.setOriginalOwner(null);
+                                
+                                // Save updated claim data
+                                plugin.getStorageManager().saveClaimData(claimData).thenRun(() -> {
+                                    plugin.getServer().getScheduler().runTask(plugin, () -> {
+                                        player.sendMessage("§aYou have successfully purchased this claim for " +
+                                            plugin.getEconomyManager().formatAmount(price) + "!");
+                                        guiManager.playBuySuccessSound(player);
+                                        player.closeInventory();
 
-                                // Notify seller
-                                UUID previousOwner = claimData.getOwner();
-                                if (previousOwner != null) {
-                                    org.bukkit.OfflinePlayer seller = org.bukkit.Bukkit.getOfflinePlayer(previousOwner);
-                                    if (seller.isOnline()) {
-                                        Player sellerPlayer = seller.getPlayer();
-                                        if (sellerPlayer != null) {
-                                            sellerPlayer.sendMessage("§6§l=== LAND SOLD ===");
-                                            sellerPlayer.sendMessage("§aYour claim has been purchased!");
-                                            sellerPlayer.sendMessage("§7Location: Claim #" + claim.getID());
-                                            sellerPlayer.sendMessage("§7Buyer: §e" + player.getName());
-                                            sellerPlayer.sendMessage("§7You received: §e" + 
-                                                plugin.getEconomyManager().formatAmount(price));
-                                            sellerPlayer.sendMessage("§6§l===================");
-                                            guiManager.playBuySuccessSound(sellerPlayer);
+                                        // Notify seller
+                                        UUID previousOwner = claimData.getOwner();
+                                        if (previousOwner != null) {
+                                            org.bukkit.OfflinePlayer seller = org.bukkit.Bukkit.getOfflinePlayer(previousOwner);
+                                            if (seller.isOnline()) {
+                                                Player sellerPlayer = seller.getPlayer();
+                                                if (sellerPlayer != null) {
+                                                    sellerPlayer.sendMessage("§6§l=== LAND SOLD ===");
+                                                    sellerPlayer.sendMessage("§aYour claim has been purchased!");
+                                                    sellerPlayer.sendMessage("§7Location: Claim #" + claim.getID());
+                                                    sellerPlayer.sendMessage("§7Buyer: §e" + player.getName());
+                                                    sellerPlayer.sendMessage("§7You received: §e" +
+                                                        plugin.getEconomyManager().formatAmount(price));
+                                                    sellerPlayer.sendMessage("§6§l===================");
+                                                    guiManager.playBuySuccessSound(sellerPlayer);
+                                                }
+                                            }
                                         }
-                                    }
-                                }
+                                    });
+                                });
                             } else {
                                 player.sendMessage("§cFailed to transfer ownership!");
                                 guiManager.playErrorSound(player);
@@ -233,6 +249,16 @@ public class GUIListener implements Listener {
             plugin.getClaimManager().transferOwnership(claim, player.getUniqueId()).thenAccept(success -> {
                 plugin.getServer().getScheduler().runTask(plugin, () -> {
                     if (success) {
+                        // FIX: Update claim data with new owner
+                        claimData.setOwner(player.getUniqueId());
+                        claimData.setSellPrice(0);
+                        claimData.setStatus(dev.cosax.cSXLandManager.model.RentStatus.PRIVATE);
+                        claimData.setRenter(null);
+                        claimData.setOriginalOwner(null);
+                        
+                        // Save updated claim data
+                        plugin.getStorageManager().saveClaimData(claimData).join();
+                        
                         player.sendMessage("§aClaim transferred successfully!");
                         guiManager.playBuySuccessSound(player);
                     } else {
@@ -327,6 +353,51 @@ public class GUIListener implements Listener {
                 if (result == null) return;
 
                 plugin.getServer().getScheduler().runTask(plugin, () -> {
+                    // Check if this is the 1-minute quick selection (durationMillis is set)
+                    if (result.durationMillis() != null && result.durationMillis() > 0) {
+                        // Direct duration selection (1-minute quick option)
+                        plugin.getLogger().info("1-minute quick selection: " + result.durationMillis() + "ms");
+                        
+                        // Get claim
+                        me.ryanhamshire.GriefPrevention.Claim claim = plugin.getClaimManager().getClaimAtLocation(player.getLocation());
+                        if (claim == null) {
+                            player.sendMessage("§cYou are not in a claim!");
+                            plugin.getGUIManager().playErrorSound(player);
+                            return;
+                        }
+
+                        // Get FRESH claim data and update duration
+                        long finalDuration = result.durationMillis();
+                        plugin.getStorageManager().loadClaimData(claim.getID()).thenCompose(dataOpt -> {
+                            CompletableFuture<dev.cosax.cSXLandManager.model.ClaimData> dataFuture;
+                            if (dataOpt.isPresent()) {
+                                dataFuture = CompletableFuture.completedFuture(dataOpt.get());
+                            } else {
+                                dataFuture = plugin.getClaimManager().getOrCreateClaimData(claim);
+                            }
+
+                            return dataFuture.thenCompose(claimData -> {
+                                claimData.setRentDuration(finalDuration);
+                                return plugin.getStorageManager().saveClaimData(claimData).thenApply(v -> claimData);
+                            });
+                        }).thenAccept(claimData -> {
+                            player.sendMessage("§aDuration set to " + plugin.getMessages().formatDuration(finalDuration) + "!");
+                            player.sendMessage("§eYou can now rent this claim with the selected duration.");
+                            plugin.getGUIManager().playSuccessSound(player);
+
+                            // Refresh GUI to show updated duration
+                            plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+                                plugin.getGUIManager().openLandGUI(player, claim);
+                            }, 10L);
+                        }).exceptionally(e -> {
+                            plugin.getLogger().log(Level.SEVERE, "Failed to set duration", e);
+                            player.sendMessage("§cFailed to set duration!");
+                            plugin.getGUIManager().playErrorSound(player);
+                            return null;
+                        });
+                        return;
+                    }
+
                     if (result.message() != null && !result.message().equals("waiting")) {
                         player.sendMessage(result.message());
                     }

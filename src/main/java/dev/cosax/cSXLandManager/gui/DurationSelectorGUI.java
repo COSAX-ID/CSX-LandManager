@@ -24,14 +24,14 @@ public class DurationSelectorGUI {
     private final dev.cosax.cSXLandManager.model.ClaimData claimData;
 
     // Duration type slots
-    private static final int MINUTES_SLOT = 11;
-    private static final int HOURS_SLOT = 13;
-    private static final int DAYS_SLOT = 15;
-    private static final int WEEKS_SLOT = 20;
-    private static final int MONTHS_SLOT = 22;
-    private static final int CUSTOM_SLOT = 24;
-    private static final int BACK_SLOT = 40;
-    private static final int CLOSE_SLOT = 44;
+    private static final int MINUTES_SLOT = 10;
+    private static final int HOURS_SLOT = 12;
+    private static final int DAYS_SLOT = 14;
+    private static final int WEEKS_SLOT = 19;
+    private static final int MONTHS_SLOT = 21;
+    private static final int CUSTOM_SLOT = 23;
+    private static final int BACK_SLOT = 39;
+    private static final int CLOSE_SLOT = 43;
 
     public DurationSelectorGUI(CSXLandManager plugin, me.ryanhamshire.GriefPrevention.Claim claim,
                                dev.cosax.cSXLandManager.model.ClaimData claimData) {
@@ -66,19 +66,19 @@ public class DurationSelectorGUI {
      * Adds duration selection buttons to the GUI.
      */
     private void addDurationButtons(Inventory inv) {
-        // Minutes button
+        // 1 Minute button (quick option)
         inv.setItem(MINUTES_SLOT, createDurationButton(
                 Material.CLOCK,
-                "&cMinutes",
-                "§7Rent by minutes",
+                "&c1 Minute",
+                "§7Quick rent for 1 minute",
                 "",
-                "§7Example: §f30 minutes",
+                "§7Perfect for quick tests!",
                 "§eClick to select"
         ));
 
         // Hours button
         inv.setItem(HOURS_SLOT, createDurationButton(
-                Material.CLOCK,
+                Material.GLOWSTONE_DUST,
                 "&6Hours",
                 "§7Rent by hours",
                 "",
@@ -208,7 +208,8 @@ public class DurationSelectorGUI {
         }
 
         if (slot == MINUTES_SLOT) {
-            return promptForAmount(player, TimeUnit.MINUTES);
+            // FIX: Direct set 1 minute (60000ms) - no need to prompt for amount
+            return CompletableFuture.completedFuture(new DurationResult(60000L, null, false));
         }
 
         if (slot == HOURS_SLOT) {

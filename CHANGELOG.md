@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.6-SNAPSHOT] - Development Version
+
+### Fixed
+- 🔧 **Buy Functionality**: Fixed ownership transfer and payment processing - land now properly transfers to buyer and money is correctly deducted
+- 🔧 **Rent Functionality**: Fixed ownership transfer during rent - land now properly transfers to renter for the rental period
+- 🔧 **Reload Command**: Fixed `/lm reload` circular dependency issue - now properly reloads config and messages without errors
+- 💰 **Payment System**: Improved atomic payment processing with proper rollback on failure
+
+### Added
+- 👁️ **Context-Aware Viewer Mode**: Non-owners now see different GUI based on claim status:
+  - **For Sale**: Shows only BUY button
+  - **For Rent**: Shows only RENT button  
+  - **Private**: Shows "Not Available" message (read-only view)
+  - **Rented**: Shows "Not Available" message (read-only view)
+- 🚫 **Permission-Based Sell Disable**: Players without `landmgmt.sell` permission cannot disable/modify sell settings (owner-only)
+- ⏱️ **1-Minute Quick Rent**: Added instant 1-minute rent duration option in DurationSelectorGUI - perfect for quick tests!
+
+### Changed
+- 🎨 **GUI Layout**: Improved DurationSelectorGUI with dedicated 1-minute button
+- 🔒 **Security**: Enhanced permission checks for sensitive operations (sell, buy, rent)
+- 📝 **Code Quality**: Better logging and error messages for debugging
+
+---
+
 ## [1.0.0-beta] - Beta Release
 
 ### Added

@@ -277,68 +277,91 @@ public class ClaimGUI {
 
     /**
      * Adds action buttons based on player and claim state.
+     * Context-aware: Shows different buttons based on player's relationship to the claim.
      */
     private void addActionButtons(Inventory inv, Player player) {
         boolean isOwner = claimManager.isClaimOwner(player, claim);
         boolean isAdmin = player.hasPermission("landmgmt.admin");
         boolean canRent = player.hasPermission("landmgmt.rent");
         boolean canBuy = player.hasPermission("landmgmt.buy");
+        boolean canSell = player.hasPermission("landmgmt.sell");
 
         // === OWNER MANAGEMENT BUTTONS (row 2) ===
-        if (isOwner || isAdmin) {
-            // Set rent price button
-            inv.setItem(SET_RENT_PRICE_SLOT, createSetRentPriceButton());
+        // Only show if player is the owner OR has admin permission OR has sell permission
+        if (isOwner || isAdmin || canSell) {
+            // Set rent price button (owner/admin only)
+            if (isOwner || isAdmin) {
+                inv.setItem(SET_RENT_PRICE_SLOT, createSetRentPriceButton());
+            }
 
-            // Set sell price button
-            inv.setItem(SET_SELL_PRICE_SLOT, createSetSellPriceButton());
+            // Set sell price button (owner/admin only)
+            if (isOwner || isAdmin) {
+                inv.setItem(SET_SELL_PRICE_SLOT, createSetSellPriceButton());
+            }
 
-            // Remove from sale button
-            if (claimData.isForSale()) {
+            // Remove from sale button (owner/admin only)
+            if ((isOwner || isAdmin) && claimData.isForSale()) {
                 inv.setItem(REMOVE_SALE_SLOT, createRemoveSaleButton());
             }
 
-            // Cancel rent button (if claim is rented)
-            if (claimData.isRented()) {
+            // Cancel rent button (if claim is rented) - owner/admin only
+            if ((isOwner || isAdmin) && claimData.isRented()) {
                 inv.setItem(CANCEL_RENT_SLOT, createCancelRentButton());
             }
 
-            // Toggle rent availability button
-            if (claimData.getStatus() == RentStatus.AVAILABLE || claimData.getStatus() == RentStatus.RENTED) {
+            // Toggle rent availability button - owner/admin only
+            if ((isOwner || isAdmin) && (claimData.getStatus() == RentStatus.AVAILABLE || claimData.getStatus() == RentStatus.RENTED)) {
                 inv.setItem(TOGGLE_RENT_SLOT, createToggleRentButton());
             }
 
-            // Toggle sale button
-            if (claimData.getStatus() == RentStatus.PRIVATE || claimData.getStatus() == RentStatus.FOR_SALE) {
+            // Toggle sale button - owner/admin only
+            if ((isOwner || isAdmin) && (claimData.getStatus() == RentStatus.PRIVATE || claimData.getStatus() == RentStatus.FOR_SALE)) {
                 inv.setItem(TOGGLE_SALE_SLOT, createToggleSaleButton());
             }
         }
 
-        // === PLAYER ACTION BUTTONS (rows 3-4) ===
-        // Only show these if NOT the owner
+        // === NON-OWNER VIEWER BUTTONS ===
+        // Context-aware: Show only relevant buttons based on claim status
         if (!isOwner || isAdmin) {
-            // Set duration button (for renting)
-            if (canRent && claimData.getStatus() == RentStatus.AVAILABLE) {
-                inv.setItem(SET_DURATION_BUTTON_SLOT, createSetDurationButton());
+            boolean isRenter = claimData.isRenter(player.getUniqueId());
+            
+            // Current renter actions (extend, auto-renew)
+            if (isRenter && !claimData.isRentExpired()) {
+                if (player.hasPermission("landmgmt.rent")) {
+                    inv.setItem(EXTEND_BUTTON_SLOT, createExtendButton());
+                }
+                if (player.hasPermission("landmgmt.autorenew")) {
+                    inv.setItem(AUTO_RENEW_BUTTON_SLOT, createAutoRenewButton());
+                }
             }
-
-            // Rent button
-            if (canRent && claimData.getStatus() == RentStatus.AVAILABLE && claimData.getRentDuration() > 0) {
-                inv.setItem(RENT_BUTTON_SLOT, createRentButton());
-            }
-
-            // Buy button
-            if (canBuy && claimData.isForSale()) {
-                inv.setItem(BUY_BUTTON_SLOT, createBuyButton());
-            }
-
-            // Extend button (for current renter)
-            if (claimData.isRenter(player.getUniqueId()) && !claimData.isRentExpired()) {
-                inv.setItem(EXTEND_BUTTON_SLOT, createExtendButton());
-            }
-
-            // Auto-renew toggle (for current renter with permission)
-            if (claimData.isRenter(player.getUniqueId()) && player.hasPermission("landmgmt.autorenew")) {
-                inv.setItem(AUTO_RENEW_BUTTON_SLOT, createAutoRenewButton());
+            // Non-renter, non-owner viewer actions
+            else if (!isRenter) {
+                // If claim is FOR SALE - show only BUY button
+                if (claimData.isForSale()) {
+                    if (canBuy) {
+                        inv.setItem(BUY_BUTTON_SLOT, createBuyButton());
+                    }
+                }
+                // If claim is AVAILABLE for rent - show only RENT button
+                else if (claimData.getStatus() == RentStatus.AVAILABLE && claimData.getRentPrice() > 0) {
+                    if (canRent) {
+                        inv.setItem(SET_DURATION_BUTTON_SLOT, createSetDurationButton());
+                        if (claimData.getRentDuration() > 0) {
+                            inv.setItem(RENT_BUTTON_SLOT, createRentButton());
+                        }
+                    }
+                }
+                // If claim is PRIVATE (not for sale/rent) - show info only
+                else if (claimData.getStatus() == RentStatus.PRIVATE) {
+                    // No action buttons - viewer mode only
+                    // Optionally add an info item explaining the land is not for sale/rent
+                    inv.setItem(RENT_BUTTON_SLOT, createNotAvailableItem());
+                }
+                // If claim is RENTED by someone else - show nothing
+                else if (claimData.getStatus() == RentStatus.RENTED) {
+                    // No action buttons - already rented by another player
+                    inv.setItem(RENT_BUTTON_SLOT, createNotAvailableItem());
+                }
             }
         }
 
@@ -639,6 +662,32 @@ public class ClaimGUI {
 
         List<String> lore = new ArrayList<>();
         lore.add("§7Click to close this menu");
+        meta.setLore(lore);
+
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    /**
+     * Creates the "not available" info item for viewers.
+     */
+    private ItemStack createNotAvailableItem() {
+        ItemStack item = new ItemStack(Material.BARRIER);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName("§cThis Land Is Not Available");
+
+        List<String> lore = new ArrayList<>();
+        if (claimData.getStatus() == RentStatus.PRIVATE) {
+            lore.add("§7This claim is not for sale or rent.");
+            lore.add("");
+            lore.add("§cYou cannot interact with this land.");
+            lore.add("§7Only the owner can manage it.");
+        } else if (claimData.getStatus() == RentStatus.RENTED) {
+            lore.add("§7This claim is currently rented by another player.");
+            lore.add("");
+            lore.add("§cIt is not available at this time.");
+            lore.add("§7Check back later when rent expires.");
+        }
         meta.setLore(lore);
 
         item.setItemMeta(meta);
