@@ -66,13 +66,13 @@ public class DurationSelectorGUI {
      * Adds duration selection buttons to the GUI.
      */
     private void addDurationButtons(Inventory inv) {
-        // 1 Minute button (quick option)
+        // Minutes button
         inv.setItem(MINUTES_SLOT, createDurationButton(
                 Material.CLOCK,
-                "&c1 Minute",
-                "§7Quick rent for 1 minute",
+                "&cMinutes",
+                "§7Rent by minutes",
                 "",
-                "§7Perfect for quick tests!",
+                "§7Example: §f30 minutes",
                 "§eClick to select"
         ));
 
@@ -208,8 +208,7 @@ public class DurationSelectorGUI {
         }
 
         if (slot == MINUTES_SLOT) {
-            // FIX: Direct set 1 minute (60000ms) - no need to prompt for amount
-            return CompletableFuture.completedFuture(new DurationResult(60000L, null, false));
+            return promptForAmount(player, TimeUnit.MINUTES);
         }
 
         if (slot == HOURS_SLOT) {

@@ -320,11 +320,11 @@ public class ChatListener implements Listener {
     }
 
     /**
-     * Parses custom duration string (e.g., "3 days", "2 weeks").
+     * Parses custom duration string (e.g., "3 days", "2 weeks", "30 minutes").
      */
     private long parseCustomDuration(String input) {
         // Pattern: number + space + unit
-        Pattern pattern = Pattern.compile("(\\d+)\\s+(hour|hours|day|days|week|weeks|month|months)", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("(\\d+)\\s+(hour|hours|day|days|week|weeks|month|months|minute|minutes)", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(input);
 
         if (!matcher.matches()) {
@@ -339,6 +339,7 @@ public class ChatListener implements Listener {
             case "day", "days" -> amount * DurationSelectorGUI.TimeUnit.DAYS.getMilliseconds();
             case "week", "weeks" -> amount * DurationSelectorGUI.TimeUnit.WEEKS.getMilliseconds();
             case "month", "months" -> amount * DurationSelectorGUI.TimeUnit.MONTHS.getMilliseconds();
+            case "minute", "minutes" -> amount * DurationSelectorGUI.TimeUnit.MINUTES.getMilliseconds();
             default -> -1;
         };
     }
@@ -395,9 +396,9 @@ public class ChatListener implements Listener {
                     plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
                         player.sendMessage("§e=== Set Rent Duration ===");
                         player.sendMessage("§7Enter duration (number + unit):");
-                        player.sendMessage("§7Examples: §f7d, 2w, 1m, 24h");
-                        player.sendMessage("§7  §f7 days, 2 weeks, 1 month");
-                        player.sendMessage("§7Units: §fh(hours) d(days) w(weeks) m(months)");
+                        player.sendMessage("§7Examples: §f7d, 2w, 1m, 30min, 24h");
+                        player.sendMessage("§7  §f7 days, 2 weeks, 1 month, 30 minutes");
+                        player.sendMessage("§7Units: §fh(hours) d(days) w(weeks) m(months) min(minutes)");
                         player.sendMessage("§7Type §ccancel §7to cancel");
                         player.sendMessage("");
                         player.sendMessage("§aWaiting for input...");
@@ -529,14 +530,15 @@ public class ChatListener implements Listener {
     /**
      * Parses simple duration string.
      * Supports: "7d", "2w", "1m", "24h" or "7 days", "2 weeks", etc.
+     * Also supports: "5min", "10minutes" for minutes
      */
     private long parseSimpleDuration(String input) {
         if (input == null || input.isEmpty()) {
             return -1;
         }
 
-        // Try format: "7d", "2w", "1m", "24h" (compact format)
-        Pattern compactPattern = Pattern.compile("(\\d+)\\s*([hdwHDWM])", Pattern.CASE_INSENSITIVE);
+        // Try format: "7d", "2w", "1m", "24h", "5min" (compact format)
+        Pattern compactPattern = Pattern.compile("(\\d+)\\s*([hdwHDWM]|min|MIN)", Pattern.CASE_INSENSITIVE);
         Matcher compactMatcher = compactPattern.matcher(input);
 
         if (compactMatcher.matches()) {
@@ -548,12 +550,13 @@ public class ChatListener implements Listener {
                 case "d" -> amount * DurationSelectorGUI.TimeUnit.DAYS.getMilliseconds();
                 case "w" -> amount * DurationSelectorGUI.TimeUnit.WEEKS.getMilliseconds();
                 case "m" -> amount * DurationSelectorGUI.TimeUnit.MONTHS.getMilliseconds();
+                case "min" -> amount * DurationSelectorGUI.TimeUnit.MINUTES.getMilliseconds();
                 default -> -1;
             };
         }
 
-        // Try format: "7 days", "2 weeks", etc (full format)
-        Pattern fullPattern = Pattern.compile("(\\d+)\\s+(hour|hours|day|days|week|weeks|month|months)", Pattern.CASE_INSENSITIVE);
+        // Try format: "7 days", "2 weeks", "30 minutes", etc (full format)
+        Pattern fullPattern = Pattern.compile("(\\d+)\\s+(hour|hours|day|days|week|weeks|month|months|minute|minutes)", Pattern.CASE_INSENSITIVE);
         Matcher fullMatcher = fullPattern.matcher(input);
 
         if (fullMatcher.matches()) {
@@ -565,6 +568,7 @@ public class ChatListener implements Listener {
                 case "day", "days" -> amount * DurationSelectorGUI.TimeUnit.DAYS.getMilliseconds();
                 case "week", "weeks" -> amount * DurationSelectorGUI.TimeUnit.WEEKS.getMilliseconds();
                 case "month", "months" -> amount * DurationSelectorGUI.TimeUnit.MONTHS.getMilliseconds();
+                case "minute", "minutes" -> amount * DurationSelectorGUI.TimeUnit.MINUTES.getMilliseconds();
                 default -> -1;
             };
         }

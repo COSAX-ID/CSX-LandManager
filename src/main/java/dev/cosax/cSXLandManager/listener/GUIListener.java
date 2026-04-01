@@ -353,51 +353,6 @@ public class GUIListener implements Listener {
                 if (result == null) return;
 
                 plugin.getServer().getScheduler().runTask(plugin, () -> {
-                    // Check if this is the 1-minute quick selection (durationMillis is set)
-                    if (result.durationMillis() != null && result.durationMillis() > 0) {
-                        // Direct duration selection (1-minute quick option)
-                        plugin.getLogger().info("1-minute quick selection: " + result.durationMillis() + "ms");
-                        
-                        // Get claim
-                        me.ryanhamshire.GriefPrevention.Claim claim = plugin.getClaimManager().getClaimAtLocation(player.getLocation());
-                        if (claim == null) {
-                            player.sendMessage("§cYou are not in a claim!");
-                            plugin.getGUIManager().playErrorSound(player);
-                            return;
-                        }
-
-                        // Get FRESH claim data and update duration
-                        long finalDuration = result.durationMillis();
-                        plugin.getStorageManager().loadClaimData(claim.getID()).thenCompose(dataOpt -> {
-                            CompletableFuture<dev.cosax.cSXLandManager.model.ClaimData> dataFuture;
-                            if (dataOpt.isPresent()) {
-                                dataFuture = CompletableFuture.completedFuture(dataOpt.get());
-                            } else {
-                                dataFuture = plugin.getClaimManager().getOrCreateClaimData(claim);
-                            }
-
-                            return dataFuture.thenCompose(claimData -> {
-                                claimData.setRentDuration(finalDuration);
-                                return plugin.getStorageManager().saveClaimData(claimData).thenApply(v -> claimData);
-                            });
-                        }).thenAccept(claimData -> {
-                            player.sendMessage("§aDuration set to " + plugin.getMessages().formatDuration(finalDuration) + "!");
-                            player.sendMessage("§eYou can now rent this claim with the selected duration.");
-                            plugin.getGUIManager().playSuccessSound(player);
-
-                            // Refresh GUI to show updated duration
-                            plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-                                plugin.getGUIManager().openLandGUI(player, claim);
-                            }, 10L);
-                        }).exceptionally(e -> {
-                            plugin.getLogger().log(Level.SEVERE, "Failed to set duration", e);
-                            player.sendMessage("§cFailed to set duration!");
-                            plugin.getGUIManager().playErrorSound(player);
-                            return null;
-                        });
-                        return;
-                    }
-
                     if (result.message() != null && !result.message().equals("waiting")) {
                         player.sendMessage(result.message());
                     }
